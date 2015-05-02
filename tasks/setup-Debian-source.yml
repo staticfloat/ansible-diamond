@@ -13,19 +13,28 @@
     - python-mock
     - python-configobj
     - python-support
+    - python-pip
+    - python-psutil
     - cdbs
     - git
 
+- name: ssh-keyscan the git server
+  sudo: no
+  shell: ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>&1
+
 - name: Checkout url from gitrepo
+  sudo: no
   git: repo={{diamond_git_repo_url}} dest=~/Diamond
   register: diamondrepo_status
 
 - name: Build Diamond from source
+  sudo: no
   command: make builddeb
   args:
     chdir: ~/Diamond
 
 - name: Locate built deb file of Diamond
+  sudo: no
   shell: ls -1 ~/Diamond/build/diamond_*_all.deb
   register: diamonddebfile
 

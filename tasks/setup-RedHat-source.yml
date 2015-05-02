@@ -18,6 +18,9 @@
     - git
     - libselinux-python
 
+- name: ssh-keyscan the git server
+  shell: ssh-keyscan -H github.com >> ~/.ssh/known_hosts 2>&1
+
 - name: Checkout url from gitrepo
   git: repo={{diamond_git_repo_url}} dest=~/Diamond
   register: diamondrepo_status

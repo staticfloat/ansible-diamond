@@ -26,8 +26,11 @@
 - include: setup-RedHat-source.yml
   when: ansible_os_family == 'RedHat' and build_from_source == true and not checkdiamondconffile.stat.exists and checkdiamondprocess|failed
 
-# Common for both OS's
+- name: Intall influxdb python client
+  sudo: yes
+  command: pip install influxdb
 
+# Common for both OS's
 - name: Update diamond.conf with latest template content
   template: src=diamond.conf dest="{{diamond_conf_basepath}}/" backup=yes
   register: diamondconffilestate
@@ -35,14 +38,13 @@
 - name: Configuring collector {{item.key}}
   template: src=diamondcollectorconf.j2 dest="{{collector_conf_path}}/{{item.key}}.conf"
   with_dict: diamond_collector_default_defs
-  when: "item.key not in diamond_collector_extra_defs.keys()"
   register: defaultdiamondcollectorsstate
 
-- name: Configuring collector {{item.key}}
-  template: src=diamondcollectorconf.j2 dest="{{collector_conf_path}}/{{item.key}}.conf"
-  with_dict: diamond_collector_extra_defs
-  register: extradiamondcollectorsstate
+# - name: Configuring collector {{item.key}}
+#   template: src=diamondcollectorconf.j2 dest="{{collector_conf_path}}/{{item.key}}.conf"
+#   with_dict: diamond_collector_extra_defs
+#   register: extradiamondcollectorsstate
 
 - name: Restart diamond if config has changed
   service: name=diamond state=restarted
-  when: defaultdiamondcollectorsstate.changed or extradiamondcollectorsstate.changed or diamondconffilestate.changed or checkdiamondprocess|failed
+  when: defaultdiamondcollectorsstate.changed or diamondconffilestate.changed or checkdiamondprocess|failed

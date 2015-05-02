@@ -1,7 +1,7 @@
 ---
 # If false you need to place the prebuilt package under files/ and specify the diamond_version variable
 build_from_source: true
-diamond_git_repo_url: https://github.com/BrightcoveOS/Diamond.git
+diamond_git_repo_url: https://github.com/staticfloat/Diamond.git
 # Version of prebuilt package, if build_from_source: true
 diamond_version: "3.5.8"
 diamond_conf_basepath: "/etc/diamond"
@@ -12,11 +12,18 @@ graphitehandler:
   host: none
   port: 2003
 statsdhandler:
-  enable: True
-  host: tbd
+  enable: False
+  host: none
   port: 8125
+influxdbhandler:
+  enable: False
+  host: none
+  port: 8086
+  username: root
+  password: root
+  database: carbon
 interval: 300
 path_prefix: "servers"
-hostname_method: "fqdn_short"
+hostname_method: "smart"
 # Override this from your playbook
 diamond_collector_extra_defs:
