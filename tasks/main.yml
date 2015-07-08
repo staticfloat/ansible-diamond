@@ -51,7 +51,7 @@
 
 - name: Checkout url from gitrepo
   sudo: no
-  git: repo={{diamond_git_repo_url}} dest=~/Diamond
+  git: repo={{diamond_git_repo_url}} dest=~/Diamond force=yes
   register: diamondrepo_status
 
 # Once again, build according to platform
